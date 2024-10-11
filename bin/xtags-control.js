@@ -62,6 +62,7 @@ customElements.define("x-img", Image);
  * @description
  *     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
  *     <i class="fa-regular fa-lightbulb" style="color:red"></i>
+ *     see https://fontawesome.com.cn/v5
  ***********************************************************/
 export class Icon extends Tag {
     constructor() {
