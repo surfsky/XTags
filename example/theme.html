@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>xtags theme</title>
+    <script src="../bin/xtags.js" type="module" defer></script>
+</head>
+<body>
+    <x-rect anchor="fill" childanchor="center" border="0">
+        <h2>Click button to change theme.</h2>
+        <x-row width="" height="60px" gap="5px">
+            <x-btn click="XTags.setTheme(Theme.themeLight)" theme="primary">Light</x-btn>
+            <x-btn click="XTags.setTheme(Theme.themeDark)"  theme="success">Dark</x-btn>
+        </x-row>
+    </x-rect>
+</body>
+</html>
+

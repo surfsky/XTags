@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>xtags rect</title>
+    <!-- Use xtags.js. Notice here must attach 'defer' attribute -->
+    <script src="../bin/xtags.js" type="module" defer></script>
+</head>
+<body>
+    <x-style></x-style>
+    <x-row width="700px" anchor="center" gap="5px">
+        <x-btn click="showDialog()" >Dialog by tag</x-btn>
+        <x-btn click="showDialog2()">Dialog by js</x-btn>
+        <x-btn click="MessageBox.show('This is message')">MessageBox</x-btn>
+        <x-btn asyncclick="showPopup()" id="btnPopup">Popup</x-btn>
+        <x-btn click="Toast.show('hello world!')" >Toast</x-btn>
+        <x-btn click="Mask.show(100)" >Mask</x-btn>
+        <x-btn id="btnTooltip" height="44px" width="120px" tip="tooltipdata">This is a longlong text to show tooltip</x-btn>
+    </x-row>
+
+    <x-dialog id="dlg" minheight="400px" minwidth="300px" shadow="false">
+        <h1>Title</h1>
+        <p>This is body</p>
+        <x-btn click="closeDialog()" anchor="bottom" bottom="16px">Close</x-btn>
+    </x-dialog>
+</body>
+</html>
+
+<script>
+
+</script>
+
+<script type="module">
+    import { XTags } from "../bin/xtags-base.js";
+    import { Tooltip, Popup } from "../bin/xtags-popup.js";
+    //Tooltip.bind('button');               // show div.textContent
+    //Tooltip.bind('button', 'tip');        // show div.tip
+    //Tooltip.bind('button', 'style.width');  // show div.style.width
+    //Tooltip.bind('button', 'style.width');  // show div.style.width
+    Tooltip.bind('button', (tag)=> `${tag.offsetLeft}, ${tag.offsetTop} <br>${tag.offsetWidth} x ${tag.offsetHeight}`);  // show with callback
+
+    // we have to enject window.xxx() to expose for page.
+    // show dialog
+    window.showDialog = function() {
+        document.querySelector('#dlg').show();
+    }
+
+    // close dialog
+    window.closeDialog = function(){
+        document.querySelector('#dlg').close();
+    }
+
+    // dynamic show dialog with dynamic content
+    window.showDialog2 = function() {
+        const dlg = document.createElement('x-dialog');
+        dlg.content = `<h1>Title</h1><p>hello world! ${new Date().toLocaleString()}</p>`;
+        dlg.setShadow(false);
+        document.body.appendChild(dlg);
+        dlg.show();
+    }
+
+    // show popup
+    window.showPopup = async function(){
+        var btn = document.querySelector('#btnPopup');
+        var rect = btn.root.getBoundingClientRect();  // get element's viewport bound
+        var x = rect.left + 'px';
+        var y = rect.bottom + 4 + 'px';
+        var pop = await Popup.show('This is content', '200px', '100px',  x, y);
+        await XTags.sleep(1000);
+        pop.close();
+    }
+
+
+</script>

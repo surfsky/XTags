@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/default.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+  <script src="../bin/fx.js" ></script>
+  <script src="../bin/xtags.js" type="module" defer></script>
+</head>
+
+<body onload="showHtmlCode('code')">
+  <x-container>
+    <h1>Responsive form layout</h1>
+    <x-form action="about.html">
+      <label>Name</label> <input type="text"></input>
+      <label>Name</label> <input type="text"></input>
+      <label>Name</label> <input type="text"></input>
+      <label>Name</label> <input type="text"></input>
+      <label>Name</label> <input type="text"></input>
+      <x-btn gridcolumn="1-1" height="34px" margin="20px 0 0 0">OK</x-btn>
+    </x-form>
+    <pre id="code" style="width:100%; overflow: scroll;"></pre>
+  </x-container>
+</body>
+</html>
+

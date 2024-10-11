@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>xtags rect</title>
+    <!-- Use xtags.js. Notice here must attach 'defer' attribute -->
+    <script src="../bin/xtags.js" type="module" defer></script>
+</head>
+<body>
+    <!-- fix rects -->
+    <x-rect bgcolor="lightgreen" hovercolor="lightblue" radius="0px" anchor="topLeft"     childAnchor='topLeft' font="bold 15px arial" click="alert('hello');">
+        topLeft
+    </x-rect>
+    <x-rect bgcolor="lightgray"  hovercolor="lightblue" radius="0px" anchor="top"         childAnchor="top"  color="red" fontsize="18px" fontweight="bold" click="toggleDiv()" id="topDiv">
+        top
+    </x-rect>
+    <x-rect bgcolor="pink"       hovercolor="lightblue" radius="0px" anchor="topRight"    childAnchor="topRight">topRight</x-rect>
+    <x-rect bgcolor="white"      hovercolor="lightblue" radius="0px" anchor="left"        childAnchor="left">left</x-rect>
+    <x-rect bgcolor="white"      hovercolor="lightblue" radius="8px" anchor="center"      childAnchor="center">
+        <div>center</div> 
+        <div>vertical align </div>
+    </x-rect>
+    <x-rect bgcolor="white"      hovercolor="lightblue" radius="0px" anchor="right"       childAnchor="right">right</x-rect>
+    <x-rect bgcolor="white"      hovercolor="lightblue" radius="0px" anchor="bottomLeft"  childAnchor="bottomLeft">bottomLeft</x-rect>
+    <x-rect bgcolor="white"      hovercolor="lightblue" radius="0px" anchor="bottom"      childAnchor="bottom">bottom</x-rect>
+    <x-rect bgcolor="white"      hovercolor="lightblue" radius="0px" anchor="bottomRight" childAnchor="bottomRight">bottomRight</x-rect>
+</body>
+</html>
+
+<script>
+    var b = false;
+    function toggleDiv(){
+        var ele = document.getElementById('topDiv');
+        b = !b;
+        if (b){
+            // set root dom's attributes
+            ele.root.style.width = '500px';
+            ele.root.style.top = '100px';
+            ele.root.style.backgroundColor = 'green';
+        }
+        else{
+            ele.root.style.width = '100px';
+            ele.root.style.top = '0px';
+            ele.root.style.backgroundColor = 'pink';
+        }
+    };
+</script>

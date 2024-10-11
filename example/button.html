@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>xtags button</title>
+    <!-- Use xtags.js. Notice here must attach 'defer' attribute -->
+    <script src="../bin/xtags.js" type="module" defer></script>
+</head>
+<body>
+    <x-grid anchor="center" width="430px" columns="3">
+        <x-btn theme="primary"   click="console.log('button1 ripple');" ripple='true'>button1</x-btn>
+        <x-btn theme="secondary" click="" ripple="true">button2</x-btn>
+        <x-btn theme="success"   asyncclick="await sleep(2000); alert('button3 asyncclick');">button3</x-btn>
+        <x-btn theme="info"      asyncclick="alert('button4')">button4</x-btn>
+        <x-btn theme="warning"   click="alert('button5')">button5</x-btn>
+        <x-btn theme="danger"    click="alert('button6')">button6</x-btn>
+    </x-grid>
+</body>
+</html>
+<script>
+    function sleep(ms) {
+        return new Promise(resolve => setTimeout(resolve, ms));
+    }
+</script>

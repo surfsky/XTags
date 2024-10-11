@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>xtags about</title>
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/default.min.css">
+    <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+    <script src="../bin/xtags.js" type="module" defer></script>
+    <script src="../bin/fx.js" ></script>
+    <style>
+        pre{
+            width: 90%;
+            position: absolute;
+            bottom: 0;
+            left:50%; 
+            transform: translateX(-50%);
+            overflow: scroll;
+        }
+    </style>
+</head>
+<body>
+    <x-rect anchor="fill" childAnchor="center" border="0" id="main">
+        <x-row anchor="topRight" right="10px" top="20px" width="100px" gap="2px">
+            <x-img icon="black-refresh" width="18px" height="18px" click="location.reload()" cursor="pointer"></x-img>
+            <x-link href="http://github.com/surfsky/xtags" target="_blank" color="red" >Github</x-link>
+        </x-row>
+        <h1>XTags.js</h1>
+        <small>Write html and easy layout with only tags & attributes.</small>
+        <small>No nodejs, No class, No css.</small>
+        <small>Build by pure html5 custom-tag tech.</small>
+        <x-row width="400px"  gap="8px" margintop="20px">
+            <x-btn click="XTags.setTheme(Theme.themeLight)" theme="primary">Light</x-btn>
+            <x-btn click="XTags.setTheme(Theme.themeDark)" theme="secondary">Dark</x-btn>
+            <x-btn click="Toast.show('Hello XTags.js!', 'white-bulb')" theme="success" >Toast</x-btn>
+        </x-row>
+    </x-rect>
+
+    <pre><code class="html">
+        &lt;script src="xtags.js" type="module" defer&gt;&lt;/script&gt;
+        &lt;x-rect anchor=‘fill’ childAnchor=‘center’ border=‘0’&gt;
+            &lt;x-row anchor=&quot;topRight&quot; right=&quot;10px&quot; top=&quot;20px&quot; width=&quot;100px&quot;&gt;
+                &lt;x-img icon=&quot;black-refresh&quot; width=&quot;18px&quot; click=&quot;location.reload()&quot; cursor=&quot;pointer&quot;&gt;&lt;/x-img&gt;
+                &lt;x-link href=&quot;http://github.com/surfsky&quot; target=&quot;_blank&quot; color=&quot;red&quot;&gt;Github&lt;/x-link&gt;
+            &lt;/x-row&gt;
+            &lt;h1&gt;XTags.js&lt;/h1&gt;
+            &lt;small&gt;Write web and easy layout without any class and style.&lt;/small&gt;
+            &lt;br/&gt;
+            &lt;x-row width=&quot;500px&quot;&gt;
+                &lt;x-btn click=&quot;XTags.setTheme(Theme.themeLight)&quot; theme=&quot;primary&quot;&gt;Light&lt;/x-btn&gt;
+                &lt;x-btn click=&quot;XTags.setTheme(Theme.themeDark)&quot; theme=&quot;secondary&quot;&gt;Dark&lt;/x-btn&gt;
+                &lt;x-btn click=&quot;Toast.show('Hello XTags.js!', 'white-bulb')&quot; theme=&quot;success&quot;&gt;Toast&lt;/x-btn&gt;
+            &lt;/x-row&gt;
+        &lt;/x-rect&gt;
+    </code></pre>
+
+</body>
+</html>
+
+<script>
+    console.log($('#main'));
+    hljs.highlightAll();
+</script>

@@ -1,0 +1,544 @@
+    <x-rect anchor="fill" left="420px" childAnchor="fill">
+        <iframe name="iframe" style="border:none; width:100%; height:100%;"></iframe>
+    </x-rect>
+
+
+  <div class="content">
+    <iframe name="iframe" src="./html5-contextmenu.html"></iframe>
+  </div>
+
+
+   .content {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100%;
+    }
+
+
+
+    <script type="module">
+        import {XTags} from "./xtags-base.js";
+        // 在使用 <script type="module"> 时，模块内的函数默认具有模块作用域，不会自动暴露到全局作用域中
+        // 所以在页面上的自定义元素的事件中无法直接调用模块中的 setTheme 函数。
+        // 要解决这个问题，可将 setTheme 函数添加到 window 对象上，使其在全局作用域中可用
+        // function setTheme(theme){
+        window.setTheme = function(theme){
+            if (theme=='light')
+                XTags.setTheme(XTags.themeLight);
+            else
+                XTags.setTheme(XTags.themeDark);
+        };
+    </script>
+
+
+<body>
+    <x-col width="100%" anchor="fill">
+        <x-rect width="100%" height="200px" bgcolor="#1c3051">
+            This is XTags
+        </x-rect>
+        <x-rect width="400px" height="100%" bgcolor="#f0f0f0" childAnchor="topLeft">
+            <ui>
+                <li><a target="iframe" href="about.html">About</a></li>
+                <li><a target="iframe" href="rect.html">Rectangle</a></li>
+                <li><a target="iframe" href="circle.html">Circle</a></li>
+                <li><a target="iframe" href="container.html">Container</a></li>
+                <li><a target="iframe" href="image.html">Image</a></li>
+                <li><a target="iframe" href="dialog.html">Dialog</a></li>
+                <li><a target="iframe" href="mobile.html">Mobile</a></li>
+            </ui>
+        </x-rect>
+        <!-- 经测试 iframe 如果丢到x-rect 中就无法显示，不知原因-->
+        <iframe name="iframe" style="flex:1; height:100%; border:none; " src="./about.html"></iframe>
+    </x-col>
+</body>
+
+    <style>
+    html,body {
+        height: 100%;    /*全屏*/
+        width: 100%;
+        margin: 0;
+        padding: 0;
+        display: flex;
+      }
+    </style>
+
+
+
+        //this.root.style.width = '100%';
+        this.root.style.padding = "0px";
+        this.root.style.borderWidth = '0';
+        this.root.style.height = '';
+        this.root.style.marginRight = '12px';
+
+
+        <!-- 经测试 iframe 如果丢到x-rect 中就无法显示，不知原因-->
+        <x-frame name="iframe" height="100%" flex="1" src="./about.html"></x-frame>
+
+
+
+        this.root.href = this.getAttribute('href');
+        this.root.target = this.getAttribute('target');
+
+    name      = 'ios';
+    background= 'white';
+    text      = 'black';
+    primary   = '#007bff';
+    secondary = '#6c757d';
+    success   = '#28a745';
+    info      = '#17a2b8';
+    warning   = '#ffc107';
+    danger    = '#dc3545';
+    dark      = '#343a40';
+    light     = '#f8f9fa';
+    border    = '#cdcdcd';
+    radius    = '8px';
+
+-----------------------------------------
+/************************************************************
+ * Link
+ * @example
+ *     <x-link></x-link>
+ ***********************************************************/
+export class Link extends Rect {
+    constructor() {
+        super();
+        this.clear();
+
+        // style
+        this.styleTag = document.createElement('style');
+        this.shadow.appendChild(this.styleTag);
+        this.styleTag.textContent = `
+            :root {
+                --link-color: blue;
+                --hover-color: blue;
+                --visited-color: blue;
+                }
+            a         { text-decoration: none; color: var(--link-color, blue);}
+            a:hover   { text-decoration: none; color: var(--hover-color, blue);}
+            a:visited { text-decoration: none; color: var(--visited-color, blue);}
+            `;
+
+        // a
+        this.root = document.createElement("a");
+        this.root.innerHTML = this.innerHTML;     // contain child items
+        this.root.style.transition = 'all 0.5s';  // animation
+        this.root.style.textDecoration = 'none';
+        this.shadow.appendChild(this.root);
+    }
+
+
+    /** Set theme. 
+     * @param {Theme} t 
+    */
+    setTheme(t){
+        this.setLinkColors(t.link, t.linkHover, t.linkVisited);  // TODO：无效？
+    }
+
+
+    /**
+     * Set link color style. Notice the visited color can't be changed for safety reason.
+     * @param {Color} color 
+     * @param {Color} hoverColor 
+     * @param {Color} visitedColor 
+     */
+    setLinkColors(color, hoverColor, visitedColor){
+        this.root.style.color = color;
+        this.setHoverTextColor(hoverColor);
+        //this.root.addEventListener('mouseover', ()=> this.style.color = color);
+        //this.root.style['--link-color'] = color;
+        //this.root.style.setProperty('--link-color', color);
+        //this.shadow.style.setProperty('--link-color', color);
+        //var o = this.root.style.getPropertyValue('--link-color');
+        //var s = this.root.style.cssText;
+        // 动态修改变量毫无效果
+        //this.root.style.setProperty('--link-color', color);
+        //this.root.style.setProperty('--hover-color', color);
+        //this.root.style.setProperty('--visit-color', color);
+    }
+
+
+    static get observedAttributes() {
+        return ['href', 'target'].concat(this._attrs);
+    }
+
+    attributeChangedCallback(name, oldValue, newValue) {
+        super.attributeChangedCallback(name, oldValue, newValue);
+        switch(name){
+            case 'href':     this.root.setAttribute('href', newValue);    break;
+            case 'target':   this.root.setAttribute('target', newValue);  break;
+            case 'color':    this.setLinkColors(newValue);                break;
+        }
+    }
+}
+customElements.define("x-link", Link);
+
+
+
+
+  <div class="container">
+    <div class="left">左侧</div>
+    <div class="right">右侧占满剩余部分</div>
+  </div>
+
+
+    .container{
+        width: 100%;
+        height: 100%;
+        display: flex;
+    }
+
+   .left {
+      width: 200px;
+      background-color: lightblue;
+      height: 100%;
+    }
+
+   .right {
+      flex: 1;
+      background-color: lightgreen;
+    }
+
+
+
+/*网格容器(4列）*/
+.grid {
+  display: grid;
+  grid-template-columns: auto auto auto auto;  /*几个auto就几列*/
+  gap: 10px;  /*子项间距*/
+  background-color: #2196F3;
+  padding: 10px;
+}
+
+
+/*表单容器1列（label+input）*/
+.gridForm1 {
+  display: grid;
+  grid-template-columns: 200px minmax(400px, 1fr);
+  gap: 10px;  /*子项间距*/
+  padding: 10px;
+}
+
+/*表单容器2列*/
+.gridForm2 {
+  display: grid;
+  grid-template-columns: minmax(100px, 200px) minmax(400px, 1fr) minmax(100px, 200px)  minmax(400px, 1fr);
+  gap: 10px;  /*子项间距*/
+  padding: 10px;
+}
+
+  <h1>GridForm: 单列表单布局</h1>
+  <div class="gridForm1 bg-primary">
+    <div>Name</div> <input type="text"></input>
+    <div>Name</div> <input type="text"></input>
+    <div>Name</div> <input type="text"></input>
+    <div>Name</div> <input type="text"></input>
+    <div>Name</div> <input type="text"></input>
+  </div>
+
+  <h1>GridForm: 双列表单布局</h1>
+  <div class="gridForm2 bg-primary">
+    <div>Name</div> <input type="text"></input>
+    <div>Name</div> <input type="text"></input>
+    <div>Name</div> <input type="text"></input>
+    <div>Name</div> <input type="text"></input>
+    <div>Name</div> <input type="text"></input>
+  </div>
+
+      
+/*Grid item 网格项（占几个网格，看图）*/
+.gi-1000 { grid-column-start: 1; grid-column-end: 2; }
+.gi-1100 { grid-column-start: 1; grid-column-end: 3; }
+.gi-1110 { grid-column-start: 1; grid-column-end: 4; }
+.gi-1111 { grid-column-start: 1; grid-column-end: 5; }
+.gi-0100 { grid-column-start: 2; grid-column-end: 3; }
+.gi-0110 { grid-column-start: 2; grid-column-end: 4; }
+.gi-0111 { grid-column-start: 2; grid-column-end: 5; }
+.gi-0010 { grid-column-start: 3; grid-column-end: 4; }
+.gi-0011 { grid-column-start: 3; grid-column-end: 5; }
+.gi-0001 { grid-column-start: 4; grid-column-end: 5; }
+
+
+
+export class Mask {
+    /**
+     * Show transparent gray mask
+     * @param {number} z zIndex value
+     */
+    static show(z=2) {
+        var mask = document.querySelector('.mask');
+        if (mask == null) {
+          mask = document.createElement('div');
+          mask.classList.add('mask');
+          mask.style.position = 'fixed';
+          mask.style.left = '0';
+          mask.style.top = '0';
+          mask.style.width = '100%';
+          mask.style.height = '100%';
+          mask.style.backgroundColor = 'rgba(0, 0, 0, 0.4)';
+          mask.style.zIndex = z;
+          document.body.appendChild(mask);
+        }
+        mask.style.display = 'block';
+    }
+
+    /**Hide mask */
+    static hide(){
+        var mask = document.querySelector('.mask');
+        if (mask != null)
+            mask.style.display = 'none';
+    }
+}
+
+    
+    <x-rect bgcolor="white" id="dlg" anchor="center" radius="16px" width="400px" height="600px" visible="false" z="200" shadow="true" draggable="true">
+        <svg id="close-icon" width="24" height="24" viewBox="0 0 24 24">
+            <circle cx="12" cy="12" r="10" stroke="gray" stroke-width="2" fill="none" />
+            <line x1="8" y1="8" x2="16" y2="16" stroke="gray" stroke-width="2" />
+            <line x1="16" y1="8" x2="8" y2="16" stroke="gray" stroke-width="2" />
+        </svg>
+        This is dialog
+        <x-btn click="showDialog(false)" anchor="bottom" bottom="16px">Close</x-btn>
+    </x-rect>
+    function showDialog(b){
+        var ele = document.getElementById('dlg');
+        ele.setVisible(b);
+        if (b){
+            ele.root.style.top = '400px';
+            //ele.root.style.left = '400px';
+        }
+        else{
+            ele.root.style.top = '-300px';
+            //ele.root.style.left = '100px';
+        }
+    }
+
+
+/************************************************************
+ * MessageBox
+ * @example
+ *     MessageBox.show('info', 'message info');
+ ***********************************************************/
+export class MessageBox {
+    /**
+     * Show toast
+     * @param {string} icon iconname without extension
+     * @param {string} text information 
+     */
+    static async show(text, icon = 'white-bulb') {
+        /*
+        <x-rect id='dlg' bgcolor="white" anchor="center" radius="16px" width="400px" height="600px" visible="false" z="200" shadow="true" draggable="true">
+            {icon}<br/>
+            {Text}
+            <x-btn click="showDialog(false)" anchor="bottom" bottom="16px">Close</x-btn>
+        </x-rect>
+        function showDialog(b){
+            var ele = document.getElementById('dlg');
+            ele.setVisible(b);
+            ele.root.style.top = (b) ? '400px'  : '-300px';
+        }
+        */
+        var width = '400px';
+        var height = '300px';
+        var dlg = new Rect()
+            .setSize(width, height)
+            .setRadius('16px')
+            .setColors(XTags.theme.success, XTags.theme.light)
+            .setShadow(true)
+            .setChildAnchor(Anchor.CT)
+            .setInnerHTML(`<x-row height="100%"><img src='${XTags.getIconUrl(icon)}' width='24px'/><div>${text}<div></x-row>`)
+            .setDraggable(true)
+            ;
+        var popup = dlg.root;
+        popup.style.transform = '';
+        popup.id = 'MessageBox';
+        popup.style.border = '0';
+        popup.style.position = 'fixed';
+        popup.style.zIndex = '100';
+        const viewportWidth = window.innerWidth || document.documentElement.clientWidth;
+        const viewportHeight = window.innerHeight || document.documentElement.clientHeight;
+        const popupWidth = popup.offsetWidth;
+        const popupHeight = popup.offsetHeight;
+        popup.style.left = (viewportWidth - popupWidth) / 2 + 'px';
+        popup.style.top = (viewportHeight - popupHeight) / 2 + 'px';
+        popup.style.display = 'block';
+        document.body.appendChild(dlg);
+
+        //
+        var img = new Image();
+        img.setAttribute('icon', icon);
+        img.setAttribute('width', '100px');
+        img.setAttribute('height', '100px');
+        dlg.appendChild(img);
+
+        //
+        var txt = new Text(text);
+        dlg.appendChild(txt);
+
+        // 
+        var btn = new Button();
+        btn.setAnchor('bottom');
+        btn.setThemeCls('primary');
+        btn.setAttribute('click', 'dlg.setVisible(false);document.body.removeChild(dlg);');
+        dlg.appendChild(btn);
+
+        //
+        //await XTags.sleep(200);
+        //dlg.setAttribute('position', 'absolute');
+        //dlg.setAttribute("top", top);
+        //dlg.setAttribute("left", left);
+    }
+}
+
+
+
+  <h1>GridForm: 响应式表单布局</h1>
+  <form class="gridForm bg-primary">
+    <label>Name</label> <input type="text"></input>
+    <label>Name</label> <input type="text"></input>
+    <label>Name</label> <input type="text"></input>
+    <label>Name</label> <input type="text"></input>
+    <label>Name</label> <input type="text"></input>
+  </form>
+  <style>
+
+/*网格子项*/
+.bg-primary > div {
+  background-color: rgba(255, 255, 255, 0.8);
+  text-align: center;
+  padding: 5px 0 5px 0;
+  font-size: 20px;
+  height: 40px;
+  overflow: hidden;
+}
+</style>
+
+
+  <x-grid anchor="fill" columns='200px minmax(200px, 1fr) 200px' gap='10px' bgcolor="#2196F3">
+    <x-rect width='100%' height="'200px" gridcolumn="1-3">1</x-rect>
+    <x-rect height="calc(100vh - 250px)">2</x-rect>
+    <x-rect height="calc(100vh - 250px)">3</x-rect>  
+    <x-rect height="calc(100vh - 250px)">4</x-rect>
+  </x-grid>
+
+
+    /**
+     * Let element to screen center
+     * @param {string} elementSelector 
+     * @param {string} width  element width, suppoort px, em , rem
+     * @param {string} height element height, suppoort px, em , rem
+     * @returns 
+     */
+    static centerElement(elementSelector, width, height) {
+      const element = document.querySelector(elementSelector);
+      if (!element) return;
+
+      // 获取视口宽度和高度
+      const viewportWidth = window.innerWidth || document.documentElement.clientWidth;
+      const viewportHeight = window.innerHeight || document.documentElement.clientHeight;
+
+      let parsedWidth, parsedHeight;
+
+      // 解析宽度和高度值
+      if (width.endsWith('px')) {
+        parsedWidth = parseInt(width, 10);
+      } else if (width.endsWith('rem')) {
+        const rootFontSize = parseInt(getComputedStyle(document.documentElement).fontSize, 10);
+        parsedWidth = parseInt(width, 10) * rootFontSize;
+      } else if (width.endsWith('em')) {
+        const parentFontSize = parseInt(getComputedStyle(element.parentNode).fontSize, 10);
+        parsedWidth = parseInt(width, 10) * parentFontSize;
+      } else {
+        console.error('Unsupported width unit');
+        return;
+      }
+
+      if (height.endsWith('px')) {
+        parsedHeight = parseInt(height, 10);
+      } else if (height.endsWith('rem')) {
+        const rootFontSize = parseInt(getComputedStyle(document.documentElement).fontSize, 10);
+        parsedHeight = parseInt(height, 10) * rootFontSize;
+      } else if (height.endsWith('em')) {
+        const parentFontSize = parseInt(getComputedStyle(element.parentNode).fontSize, 10);
+        parsedHeight = parseInt(height, 10) * parentFontSize;
+      } else {
+        console.error('Unsupported height unit');
+        return;
+      }
+
+      // 计算并设置元素的位置
+      element.style.top = ((viewportHeight - parsedHeight) / 2) + 'px';
+      element.style.left = ((viewportWidth - parsedWidth) / 2) + 'px';
+    }
+
+      getInnerHTML(){
+      return this.root.innerHTML;
+  }
+
+  setInnerHTML(val){
+      this.root.innerHTML = val;
+      return this;
+  }
+
+
+        // root div
+        this.root = document.createElement('div');
+        this.root.innerHTML = this.innerHTML;   // contain child items
+        this.shadow.appendChild(this.root);
+        //this.root.style.flexWrap = "wrap";
+        //this.root.style.alignItems = 'flex-start';
+        //this.root.style.justifyContent = 'flex-start';
+
+        <x-btn click="document.querySelector('#dlg').close()" anchor="bottom" bottom="16px">Close</x-btn>
+
+        //this.shadowRoot.querySelector('.popup').style.display = 'none';
+        //this.remove();
+
+
+            //await new Promise((resolve) => {
+            //    setTimeout(() => {
+            //        eval(func); 
+            //        resolve();
+            //    }, 0);
+            //});
+
+
+                //await new Promise((resolve) => {
+                //    eval(func); 
+                //    resolve();
+                //});
+
+
+
+  /** Css property getter */
+  //get(property){
+  //    return this.root.style.getPropertyValue(property);
+  //}
+  /** Css property setter */
+  //set(property, val){
+  //    this.root.style.setProperty(property, val);
+  //    return this;
+  //}
+
+  /**Clear all children */
+  clear() {
+      while (this.shadowRoot.firstChild) {
+          this.shadowRoot.removeChild(this.shadowRoot.firstChild);
+      }
+  }
+
+        //tags = tags.filter(element => element.nodeName.startsWith('X-'));  // use in shadow mode. The nodeName will be upper.
+
+
+    /**Remove dom and style tags */
+    release(){
+        if (this.useShadow){
+            document.body.removeChild(this);
+        }
+        else{
+            document.body.removeChild(this.root);
+            document.head.removeChild(this.styleTag);
+        }
+    }
+    

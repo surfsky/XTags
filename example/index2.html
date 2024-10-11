@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Index</title>
+  <style>
+    html,body {
+      height: 100%;    /*全屏*/
+      width: 100%;
+      display: flex;   /*左右结构*/
+      margin: 0;
+      padding: 0;
+    }
+
+   .menu {
+      width: 300px;
+      background-color: #f0f0f0;
+      padding: 10px;
+    }
+    iframe {
+        flex:1;   /*填满剩余部分*/
+        border: none;
+        height: 100%;
+    }
+    li::before{
+      content: "";
+    }
+  </style>
+</head>
+
+<body>
+  <div class="menu">
+    <h2>XTags.js</h2>
+    <ul>
+        <li><a target="iframe" href="./about.html">About</a></li>
+        <li><a target="iframe" href="./theme.html">Theme</a></li>
+        <li>basic</li>
+        <ul>
+          <li><a target="iframe" href="./rect.html">Rectangle</a></li>
+          <li><a target="iframe" href="./circle.html">Circle</a></li>
+          <li><a target="iframe" href="./image.html">Image</a></li>
+          <li><a target="iframe" href="./icon.html">Icon</a></li>
+          <li><a target="iframe" href="./popup.html">Popup</a></li>
+        </ul>
+        <li>Layout</li>
+        <ul>
+          <li><a target="iframe" href="./layout.html">Row Column</a></li>
+          <li><a target="iframe" href="./layout-container.html">Responsive container</a></li>
+          <li><a target="iframe" href="./layout-form.html">Responsive Form</a></li>
+          <li><a target="iframe" href="./layout-portal.html">Layout portal</a></li>
+          <li><a target="iframe" href="./layout-dashboard.html">Layout Dashboard</a></li>
+          <li><a target="iframe" href="./layout-mobile.html">Layout Mobile</a></li>
+        </ul>
+        <li>Form</li>
+        <ul>
+          <li><a target="iframe" href="./button.html">Button</a></li>
+        </ul>
+    </ul>
+  </div>
+  <iframe name="iframe" src="./about.html"></iframe>
+</body>
+
+</html>
