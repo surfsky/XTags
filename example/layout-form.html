@@ -7,7 +7,7 @@
   <script src="../bin/xtags.js" type="module" defer></script>
 </head>
 
-<body onload="showHtmlCode('code')">
+<body>
   <x-container>
     <h1>Responsive form layout</h1>
     <x-form action="about.html">
@@ -16,10 +16,27 @@
       <label>Name</label> <input type="text"></input>
       <label>Name</label> <input type="text"></input>
       <label>Name</label> <input type="text"></input>
-      <x-btn gridcolumn="1-1" height="34px" margin="20px 0 0 0">OK</x-btn>
+      <x-btn gridcolumn="1-1" height="34px" margintop="20px">OK</x-btn>
     </x-form>
-    <pre id="code" style="width:100%; overflow: scroll;"></pre>
+    <x-tag tagname="pre" width='90%' overflow='scroll' anchor="bottom">
+      <code id="code"></code>
+    </x-tag>
   </x-container>
 </body>
 </html>
+
+<script>
+    var txt = htmlEncode(`
+      <x-form action="about.html">
+        <label>Name</label> <input type="text"></input>
+        <label>Name</label> <input type="text"></input>
+        <label>Name</label> <input type="text"></input>
+        <label>Name</label> <input type="text"></input>
+        <label>Name</label> <input type="text"></input>
+        <x-btn gridcolumn="1-1" height="34px" margintop="20px">OK</x-btn>
+      </x-form>
+      `);
+    $('#code').innerHTML = txt;
+    hljs.highlightAll();
+</script>
 

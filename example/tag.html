@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/default.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+    <script src="../bin/xtags.js" type="module" defer></script>
+</head>
+<body>
+    <x-tag tagname="pre" width='100%' overflow='scroll'>
+        <code id="code"></code>
+    </x-tag>
+</body>
+</html>
+
+<script type="module">
+    import {XTags} from "../bin/xtags-base.js";
+    var txt = XTags.htmlEncode(`
+        <x-tag tagname="pre" width='100%' overflow='scroll'>
+            <code id="code"></code>
+        </x-tag>
+      `);
+    XTags.$('#code').innerHTML = txt;
+    hljs.highlightAll();
+</script>

@@ -1,14 +1,97 @@
------------------------------------------------------
-About XTags
------------------------------------------------------
-xtags : html5 custom tag system without writing any css and class.
+# 1. About XTags.js
 
-author: surfsky.github.com 2024
+- Html5 custom tag system build by pure javascript class.
+- Write html and easy layout with only tags & attributes.
+- No nodejs, No class, No css.
+- author: surfsky.github.com 2024
+
+[toc]
 
 
+# 2. Usage
+
+## See
+
+-  [Example site](https://surfsky.github.io/xtags.js)
+-  [Code](./example/index.html)
+
+
+## Include
+
+``` html
+<script src="./xtags.js" type='module' defer ></script>
+```
+
+## Code
+
+``` html
+<x-rect anchor="topLeft" childanchor='center'>topLeft</x-rect>
+<x-row gap='20px' anchor="center" width="430px">...<x-row>
+<x-col gap="20px" anchor='right'  width="130px" height="500px">...<x-col>
+<x-grid columns='4'>...<x-grid>
+<x-form>...<x-form>
+```
+
+## 3.Shotsnap
+
+### Theme 
+
+![](./doc/theme-dark.png)
+![](./doc/theme-light.png)
+
+
+### Basic
+
+#### Rect
+![](./doc/basic-rect.png)
+
+#### Circle
+![](./doc/basic-circle.png)
+
+#### Image
+![](./doc/basic-image.png)
+
+#### IconFont
+![](./doc/basic-icon.png)
+
+
+### Layout
+
+#### Row Column Grid
+![](./doc/layout-row-col-grid.png)
+
+#### Responsive container
+![](./doc/layout-container.png)
+
+#### Responsive form
+![](./doc/layout-form1.png)
+![](./doc/layout-form2.png)
+![](./doc/layout-form4.png)
+
+#### Responsive portal
+![](./doc/layout-portal.png)
+
+#### Dashboard
+![](./doc/layout-dashboard.png)
+
+#### Mobile
+![](./doc/layout-mobile.png)
+
+
+### Popup
+
+![](./doc/popup.png)
+![](./doc/popup-dialog.png)
+![](./doc/popup-messagebox.png)
+![](./doc/popup-toast.png)
+![](./doc/popup-tooltip.png)
+![](./doc/popup-mask.png)
+
+
+
+# 4. Features
 -----------------------------------------------------
-Features
------------------------------------------------------
+
 - Tags: 
     - basic: tag, rect, circle, style
     - container: container, row, col, grid, form, frame
@@ -32,6 +115,7 @@ Features
     - Just use XTags.showTheme(.)
 
 - Attributes
+```
     baseui: 
         tag
             box
@@ -84,40 +168,28 @@ Features
         control
     util:
         extensions
-
-
-
------------------------------------------------------
-Examples
------------------------------------------------------
-``` js
-<script src="./xtags.js" type='module' defer ></script>
-
-<x-rect anchor="topLeft" childanchor='center'>topLeft</x-rect>
-<x-row gap='20px' anchor="center" width="430px">...<x-row>
-<x-col gap="20px" anchor='right'  width="130px" height="500px">...<x-col>
-<x-grid columns='4'>...<x-grid>
-<x-form>...<x-form>
 ```
 
 
 
+#5. Extension
 -----------------------------------------------------
-shadow mode and inplace mode
------------------------------------------------------
-    
-- shadow 模式是将动态生成的标签创建在 shadowDOM 内部，所有的style和js都自封装起来，好处是独立，不会污染页面。坏处是由于其隔离模式，无法被外部访问，会导致以下问题：
-    三方库（如highlight.js）无法集成 ，估计是尝试获取 queryElement() 获取shadowDom中的子元素失败。
-    iframe 放在 xtags 里面，无法自动撑开，要手动指定 width=100%
-    iframe 放在 xtags 里面，<a> 标签中的target无法正确指向
-    x-row 中的按钮点击后无法获取按钮的坐标和区域。见 popup.html
-- inplace 模式是将动态生成的标签替代原有的 x- 开头的标签。好处是兼容三方类库且不会污染页面。
-- 现阶段大部分控件都是用 inplace 方式创建的，少数复杂控件采用 shadow 模式封装：dialog、messagebox、popup
+
+Shadow mode or inplace mode?
+
+    - shadow 模式是将动态生成的标签创建在 shadowDOM 内部，所有的style和js都自封装起来，好处是独立，不会污染页面。坏处是由于其隔离模式，无法被外部访问，会导致以下问题：
+        三方库（如highlight.js）无法集成 ，估计是尝试获取 queryElement() 获取shadowDom中的子元素失败。
+        iframe 放在 xtags 里面，无法自动撑开，要手动指定 width=100%
+        iframe 放在 xtags 里面，<a> 标签中的target无法正确指向
+        x-row 中的按钮点击后无法获取按钮的坐标和区域。见 popup.html
+    - inplace 模式是将动态生成的标签替代原有的 x- 开头的标签。好处是兼容三方类库且不会污染页面。
+    - 现阶段大部分控件都是用 inplace 方式创建的，少数复杂控件采用 shadow 模式封装：dialog、messagebox、popup
 
 
+#6. Task
 -----------------------------------------------------
-Task
------------------------------------------------------
+```
+
 优化dialog
     提供标题栏供拖动
     实现dialog buttons and dialogResult
@@ -144,13 +216,16 @@ child sortable
 发布
     build min.js
     备选名称：classless.js, noclass.js, cssless.js, onlytags.js
+```
 
 
-
-
+#7. History
 -----------------------------------------------------
-history
------------------------------------------------------
+```
+/bgimage
+       background-image: url('path/to/your/image.jpg');
+       background-repeat: no-repeat;
+       background-position: center;
 /实现iconfont, x-icon
 /优化tootip，支持：textContext、attribute、callback
 /修复 dialog、messagebox、Popup
@@ -212,3 +287,4 @@ history
 /重构类库结构：base、baseui、control、util...
 /Rect.fix -> anchor
 
+```

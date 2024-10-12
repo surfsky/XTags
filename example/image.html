@@ -1,21 +1,19 @@
-<!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>xtags image</title>
     <script src="../bin/xtags.js" type="module" defer></script>
 </head>
 <body>
-    <x-img width='100px' anchor="topLeft"     icon="black-bulb" padding="5px" border="1px solid red">topLeft</x-img>
-    <x-img width='100px' anchor="top"         icon="black-bulb">top</x-img>
-    <x-img width='100px' anchor="topRight"    icon="black-bulb">topRight</x-img>
-    <x-img width='100px' anchor="left"        icon="black-bulb">left</x-img>
-    <x-img width='100px' anchor="center"      avatar='true' src="http://gips3.baidu.com/it/u=1821127123,1149655687&fm=3028&app=3028&f=JPEG&fmt=auto?w=720&h=1280"></x-img>
-    <x-img width='100px' anchor="right"       icon="black-bulb">right</x-img>
-    <x-img width='100px' anchor="bottomLeft"  icon="black-bulb">bottomLeft</x-img>
-    <x-img width='100px' anchor="bottom"      icon="black-bulb">bottom</x-img>
-    <x-img width='100px' anchor="bottomRight" icon="black-bulb">bottomRight</x-img>
+    <x-style 
+       bgimage="http://gips3.baidu.com/it/u=1821127123,1149655687&fm=3028&app=3028&f=JPEG&fmt=auto?w=720&h=1280" 
+       bgsize="cover" />
+
+    <x-row width="100%" gap="10px">
+        <x-img width='100px' src="http://gips3.baidu.com/it/u=1821127123,1149655687&fm=3028&app=3028&f=JPEG&fmt=auto?w=720&h=1280"></x-img>
+        <x-img width='100px' avatar='true'  src="http://gips3.baidu.com/it/u=1821127123,1149655687&fm=3028&app=3028&f=JPEG&fmt=auto?w=720&h=1280"></x-img>
+        <x-rect width="200px" height="400px" 
+            bgimage="http://gips3.baidu.com/it/u=1821127123,1149655687&fm=3028&app=3028&f=JPEG&fmt=auto?w=720&h=1280" 
+            bgsize="100% 100%" ></x-rect>
+    </x-row>
 </body>
 </html>

@@ -40,16 +40,17 @@ export class Image extends Tag {
                 this.root.setAttribute('src', XTags.getIconUrl(newValue));
                 break;
             case 'avatar':
-                if (Boolean(newValue)) {
+                if (XTags.toBool(newValue)) {
                     this.root.style.height = this.root.style.width;
                     this.root.style.backgroundColor = 'white';
                     this.root.style.padding = '5px';
-                    this.root.style.border = '1px solid gray';
+                    this.root.style.border = '1px solid #a0a0a0';
                     this.root.style.borderRadius = '50%';
                 }
                 break;
         }
     }
+
 }
 customElements.define("x-img", Image);
 
@@ -93,7 +94,6 @@ customElements.define("x-icon", Icon);
  ***********************************************************/
 export class Link extends Tag {
     constructor() {
-        this.useShadow = true;  // 如何插入到super 前面去
         super();
     }
 

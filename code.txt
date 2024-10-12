@@ -542,3 +542,9 @@ export class MessageBox {
         }
     }
     
+
+
+
+  <x-rect width="100%"  height="200px"             anchor="top"   bgcolor="#FFFFFF90"></x-rect>
+  <x-rect width="200px" height="calc(100vh-200px)" anchor="left"  bgcolor="#FFFFFF90"></x-rect>
+  <x-rect width="200px" height="calc(100vh-200px)" anchor="right" bgcolor="#FFFFFF90"></x-rect>

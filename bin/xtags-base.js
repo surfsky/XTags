@@ -73,7 +73,7 @@ export class Theme{
         text        : '#cccccc',
         textLight   : '#f0f0f0', //'#f8f9fa',
         link        : 'red',
-        linkHover   : 'darkred',
+        linkHover   : 'green',
         linkVisited : 'gray',
         primary     : '#007bff',
         secondary   : '#7633d4',
@@ -134,6 +134,26 @@ export class XTags {
     static uuid(){
         return Date.now().toString(36) + Math.random().toString(36).substring(2);
     }
+
+    /**HtmlEncode */
+    static htmlEncode(code) {
+        return code.replace(/[<>]/g, function(match) {
+            switch (match) {
+                case '<':   return '&lt;';
+                case '>':   return '&gt;';
+            }
+        });
+        //return code.replace(/[<>&"']/g, function(match) {
+        //    switch (match) {
+        //        case '<':   return '&lt;';
+        //        case '>':   return '&gt;';
+        //        case '&':   return '&amp;';
+        //        case '"':   return '&quot;';
+        //        case "'":   return '&#39;';
+        //    }
+        //});
+    }
+  
 
     //-----------------------------------------
     // DOM
@@ -261,6 +281,20 @@ export class XTags {
         return `${this.iconRoot}${name}.png`;
     }
 
+
+    //-----------------------------------------
+    // Convertor
+    //-----------------------------------------
+    /**Get boolean value 
+     * @param {string | boolean} val 
+    */
+    static toBool(val){
+        var type = typeof val;
+        if (type == 'boolean') return val;
+        if (type == 'string')  return val.toLowerCase() == 'true';
+        return false;
+    }
+    
 
     //-----------------------------------------
     // Color
@@ -394,14 +428,16 @@ export class Tag extends HTMLElement {
         'display', 'childanchor', 'textalign', 'flex', 'gridcolumn',
 
         // theme
-        'background','bgcolor', 'hoverbgcolor', 'theme', 
-        'color', 'hovercolor', 'font', 'fontsize', 'fontfamily', 'fontstyle', 'fontweight',
+        'theme', 
+        'background','bgcolor', 'bgimage', 'bgrepeat', 'bgposition', 'bgsize',
+        'color', 'font', 'fontsize', 'fontfamily', 'fontstyle', 'fontweight',
 
         // data
         'title', 'tip',
 
         // effect
         'shadow', 'transform', 'rotate', 'scale', 'skew', 'textshadow',
+        'hoverbgcolor', 'hovercolor',
 
         // event
         'click', 'draggable',
@@ -451,7 +487,11 @@ export class Tag extends HTMLElement {
 
     /**Create root element(virtual function) */
     createRoot(){
-        var ele = document.createElement("div");
+        var tagName = this.getAttribute('tagname');
+        if (tagName == null) tagName = 'div';
+
+        //
+        var ele = document.createElement(tagName);
         ele.innerHTML = this.innerHTML;      // contain child items
         ele.style.transition = 'all 0.5s';   // animation
         //ele.style.boxSizing = 'border-box';  // size = content + padding + border, margin is outside.
@@ -577,13 +617,15 @@ export class Tag extends HTMLElement {
             case 'theme':             this.setThemeCls(newValue); break;
 
             // background
-            case 'bgcolor':           this.root.style.backgroundColor = newValue;  break;
-            case 'hoverbgcolor':      this.setHoverBgColor(newValue); break;
             case 'background':        this.root.style.background = newValue; break;
+            case 'bgcolor':           this.root.style.backgroundColor = newValue;  break;
+            case 'bgimage':           this.root.style.backgroundImage = `url('${newValue}')`; break;
+            case 'bgrepeat':          this.root.style.backgroundRepeat = newValue; break;
+            case 'bgposition':        this.root.style.backgroundPosition = newValue; break;
+            case 'bgsize':            this.root.style.backgroundSize = newValue; break;
 
             // text
             case 'color':             this.root.style.color = newValue;  break;
-            case 'hovercolor':        this.setHoverTextColor(newValue);  break;
             case 'font':              this.root.style.font = newValue;  break;
             case 'fontsize':          this.root.style.fontSize = newValue;  break;
             case 'fontfamily':        this.root.style.fontFamily = newValue;  break;
@@ -601,6 +643,8 @@ export class Tag extends HTMLElement {
             case 'rotate':            this.root.style.transform = `rotate(${newValue}deg)`; break;
             case 'skew':              this.root.style.transform = `skew(${newValue}deg)`; break;
             case 'scale':             this.root.style.transform = `scale(${newValue})`; break;
+            case 'hoverbgcolor':      this.setHoverBgColor(newValue); break;
+            case 'hovercolor':        this.setHoverTextColor(newValue);  break;
 
             // event
             case 'click':             this.setClick(newValue); break;
@@ -944,8 +988,21 @@ export class Tag extends HTMLElement {
         }
     }
 }
-customElements.define("x-div", Tag);
+customElements.define("x-tag", Tag);
 
+
+
+/***********************************************************
+ * Div
+ * @example
+ *     <x-div cellmargin="0 20px 0 0" bgcolor="lightgray" margin="0 0 10px 0" ></x-div>
+ ***********************************************************/
+export class Div extends Tag {
+    constructor() {
+        super();
+    }
+}
+customElements.define("x-div", Div);
 
 
 
@@ -964,9 +1021,9 @@ export class Style extends Tag {
     }
 
     createStyle(){
-        this.root.styleTag = document.createElement('style');
-        document.head.appendChild(this.root.styleTag);
-        this.root.styleTag.textContent = `
+        var tag = document.createElement('style');
+        //document.head.appendChild(tag);
+        tag.textContent = `
             /* fullscreen */
             html,body {
                 width: 100%;  height: 100%; 
@@ -982,6 +1039,7 @@ export class Style extends Tag {
             /* link */
             a, a:hover, a:visited { text-decoration: none; }
         `;
+        return tag;
     }
 }
 

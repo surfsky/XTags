@@ -20,7 +20,7 @@
         }
     </style>
 </head>
-<body>
+<body onload="hljs.highlightAll()">
     <x-rect anchor="fill" childAnchor="center" border="0" id="main">
         <x-row anchor="topRight" right="10px" top="20px" width="100px" gap="2px">
             <x-img icon="black-refresh" width="18px" height="18px" click="location.reload()" cursor="pointer"></x-img>
@@ -57,8 +57,3 @@
 
 </body>
 </html>
-
-<script>
-    console.log($('#main'));
-    hljs.highlightAll();
-</script>
