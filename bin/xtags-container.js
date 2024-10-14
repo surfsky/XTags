@@ -37,7 +37,6 @@ customElements.define("x-rect", Rect);
 export class Circle extends Rect {
     constructor() {
         super();
-        this.root.style.overflow = 'hidden';
     }
     attributeChangedCallback(name, oldValue, newValue) {
         super.attributeChangedCallback(name, oldValue, newValue);
@@ -289,11 +288,13 @@ customElements.define("x-container", Container);
 export class Frame extends Tag {
     constructor() {
         super();
-        this.clear();
-        this.root = document.createElement("iframe");
-        this.root.innerHTML = this.innerHTML;
-        this.root.style.border = '0';
-        this.shadowRoot.appendChild(this.root);
+    }
+
+    createRoot(){
+        var root = document.createElement("iframe");
+        root.innerHTML = this.innerHTML;
+        root.style.border = '0';
+        return root;
     }
 
     static get observedAttributes() {

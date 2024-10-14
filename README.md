@@ -2,8 +2,8 @@
 
 - Html5 custom tag system build by pure javascript class.
 - Write html and easy layout with only tags & attributes.
-- No nodejs, No class, No css.
-- author: surfsky.github.com 2024
+- No class, No css, No nodejs.
+- Author: surfsky.github.com 2024
 
 [toc]
 
@@ -92,137 +92,239 @@
 # 4. Features
 -----------------------------------------------------
 
-- Tags: 
-    - basic: tag, rect, circle, style
-    - container: container, row, col, grid, form, frame
+- Support tags
+    - basic: tag, div, style
+    - container: rect, circle, container, row, col, grid, form, frame
     - control: image, icon, link
-    - form: button
     - popup: toast, mask, dialog, messagebox, popup, tooltip
+    - form: button
 
-- Position
-    - anchor, fixanchor
-    - childanchor
+- Support tag attributes
+    ```
+    // basic
+    'id', 'name', 'class', 'newclass', 'z', 'opacity', 'visible', 'overflow', 'cursor',
 
-- Effect
-    - Hover color change
-    - Animation for position, size, color...
-    - Button click ripple effect
+    // box module
+    'box', 
+    'margin',  'margintop',  'marginright',  'marginbottom',  'marginleft', 
+    'padding', 'paddingtop', 'paddingright', 'paddingbottom', 'paddingleft', 
+    'width', 'height', 'minwidth', 'minheight', 'maxwidth', 'maxheight',
+    'border', 'borderwidth', 'bordercolor', 'borderstyle', 'radius',  
 
-- Event
-    - click
+    // position
+    'position', 'anchor', 'fixanchor', 'top', 'bottom', 'left', 'right',  
 
-- Theme
-    - Just use XTags.showTheme(.)
+    // child position
+    'display', 'childanchor', 'textalign', 'flex', 'gridcolumn',
 
-- Attributes
-```
-    baseui: 
-        tag
-            box
-                /size
-                /border
-                /margin\padding
-                /radius
-            position
-                /anchor
-                /childAnchor
-            theme
-                /bgcolor
-                /textcolor
-                /hovercolor
-                /font
-                /theme
-            effect
-                /transform
-                /shadow
-                /textshadow
-                /rotate
-                /scale
-                /skew
-                /animation
-        container
-            /row
-            /column
-            /grid
-            /iframe
-            /form responsive
-            /container
-        event
-            /click
-            /hover
-            drag
-            swipe
-        temple
-    control:
-        /button
-        /image
-        /icon
-        /link
-        switch
-        groupbutton
-        textbox
-        popup
-        toast
-    canvas
-        shape
-        control
-    util:
-        extensions
-```
+    // theme
+    'theme', 
+    'background','bgcolor', 'bgimage', 'bgrepeat', 'bgposition', 'bgsize',
+    'color', 'font', 'fontsize', 'fontfamily', 'fontstyle', 'fontweight',
+
+    // data
+    'title', 'tip',
+
+    // effect
+    'shadow', 'transform', 'rotate', 'scale', 'skew', 'textshadow',
+    'hoverbgcolor', 'hovercolor',
+
+    // event
+    'click', 'draggable',
+    ```
+
+- Control attributes:
+    - Button attributes
+        - ripple : show click ripple effect
+        - asyncclick : click > disable button > wait for excute finished > enable button.
+    - Image
+        - avatar
+        - icon
+
+- Support animation
+    - XTags support all attribute animation for position, size, color...
+    - Support extra animation effects, eg. Hover color, click ripple...
+        ``` html
+        <x-rect bgcolor="lightred"  hoverbgcolor="lightblue" >
+            hover to change color
+        </x-rect>
+        ```
+    - Use animate() function to apply animation: 
+        ``` js
+        <x-rect bgcolor="lightgreen" click="animate(this)" id="rect1">
+            click to change color
+        </x-rect>
+        function animate(ele){
+            ele.animate(()=> ele.style.backgroundColor = getRandomColor());
+        }
+        ```
+
+- Support Theme
+    ``` js
+    import {XTags} from "xtags-base.js";
+    XTags.setTheme(new Theme({
+        name        : 'MaterialDark',
+        text        : '#cccccc',
+        textLight   : '#f0f0f0',
+        background  : '#171717',
+        link        : 'red',
+        linkHover   : 'green',
+        linkVisited : 'gray',
+        primary     : '#007bff',
+        secondary   : '#7633d4',
+        success     : '#28a745',
+        info        : '#17a2b8',
+        warning     : '#ffc107',
+        danger      : '#dc3545',
+        dark        : '#343a40',
+        light       : '#f8f9fa',
+        border      : '1px solid #707070',
+        radius      : '8px',
+    });
+    ```
+
+    Custom tag should override setTheme(t) function, such as:
+    ``` js
+    setTheme(t){
+        this.root.style.color = t.text;
+        switch (this.root.themeCls){
+            case "primary":   this.root.style.backgroundColor = t.primary;     break;
+            case "secondary": this.root.style.backgroundColor = t.secondary;   break;
+            case "success":   this.root.style.backgroundColor = t.success;     break;
+            case "info":      this.root.style.backgroundColor = t.info;        break;
+            case "warning":   this.root.style.backgroundColor = t.warning;     break;
+            case "danger":    this.root.style.backgroundColor = t.danger;      break;
+            default:          this.root.style.backgroundColor = t.background;  break;
+        }
+        return this;
+    }
+    ```
+
 
 
 
 #5. Extension
 -----------------------------------------------------
 
-Shadow mode or inplace mode?
+# Display any tag with x-tag
 
-    - shadow 模式是将动态生成的标签创建在 shadowDOM 内部，所有的style和js都自封装起来，好处是独立，不会污染页面。坏处是由于其隔离模式，无法被外部访问，会导致以下问题：
-        三方库（如highlight.js）无法集成 ，估计是尝试获取 queryElement() 获取shadowDom中的子元素失败。
-        iframe 放在 xtags 里面，无法自动撑开，要手动指定 width=100%
-        iframe 放在 xtags 里面，<a> 标签中的target无法正确指向
-        x-row 中的按钮点击后无法获取按钮的坐标和区域。见 popup.html
-    - inplace 模式是将动态生成的标签替代原有的 x- 开头的标签。好处是兼容三方类库且不会污染页面。
-    - 现阶段大部分控件都是用 inplace 方式创建的，少数复杂控件采用 shadow 模式封装：dialog、messagebox、popup
+Juse use x-tag and set attribute tagname='sometag'. eg.
+
+    ``` html
+    <x-tag tagname="pre" width='100%' overflow='scroll'>
+        ...
+    </x-tag>
+    ```
+
+# Shadow mode or inplace mode?
+
+
+Difference between shadow-mode and inplace-mode:
+
+- Inplace mode: Create tags in doucment body, and replace the raw x-xxx tags. This mode can be compatible with third-party libraries. The most xtags are build by *inplace mode*, excepting some complex control, such as dialog、messagebox、popup.
+
+- Shadow mode: Create tags in shadowDOM, include tags, style, javascript, etc. The advantage is selffolded and poluteless to page. The disadvantage is caused by isolation that the inner elements can't be visited by js search function(eg. document.querySelector()) and page css。 The mode may cause some questions：
+    - The page css can't not effect shadow-mode tag's inner element's style.
+    - Three-party library (such as highlight.js) work fail.
+    - IFrame in xtags can't be expanded auto. <a target='iframename'> can't be worked.
+    - Can't get items's real position in XTags container (such as x-row in popup.html)
+
+- If you want to specify a certain mode, to set the attribute 'useshadow'. eg.
+
+``` html
+<x-form useshadow='true'>....</x-form>
+```
+
+- Build custom tag:
+
+steps
+
+- Create class extend Tag.
+- Override createRoot(), createStyle(), setTheme() if need.
+- Regist customElements by `customElements.define("x-tagname", ClassName);'.
+
+eg.
+```
+export class Container extends Tag {
+    constructor() {
+        super();
+    }
+
+    createRoot(){
+        this.root = document.createElement('div');
+        this.root.innerHTML = this.innerHTML;
+        this.root.style.transition = 'all 0.5s';   // animation
+        return this.root;
+    }
+
+    createStyle(){
+        this.root.id = this.getId();
+        const style = document.createElement('style');
+        style.textContent = `
+            #${this.root.id} {
+                width: 100%;
+                margin-left: auto;
+                margin-right: auto;
+                padding-left: 15px;
+                padding-right: 15px;
+                }
+                /* Responsive container 540-720-960-1140 */
+                @media (min-width: 576px)  { #${this.root.id}   {max-width: 540px;}}  /*xs*/
+                @media (min-width: 768px)  { #${this.root.id}   {max-width: 720px;}}  /*s*/
+                @media (min-width: 992px)  { #${this.root.id}   {max-width: 960px;}}  /*m*/
+                @media (min-width: 1200px) { #${this.root.id}   {max-width: 1140px;}} /*l*/
+                @media (min-width: 1500px) { #${this.root.id}   {max-width: 1400px;}} /*xl*/
+                @media (min-width: 1800px) { #${this.root.id}   {max-width: 1700px;}} /*xxl*/
+                @media (min-width: 2000px) { #${this.root.id}   {max-width: 1900px;}} /*xxxl*/
+        `;
+        return style;
+    }
+}
+
+customElements.define("x-container", Container);
+```
 
 
 #6. Task
 -----------------------------------------------------
 ```
-用 ajax 简化页面代码显示，再用个iframe吧
-
+layout-dashboard 改为 anchor 模式
 优化dialog
     提供标题栏供拖动
     实现dialog buttons and dialogResult
     提供resize属性以及其它属性供用户自己设置
-实现SideDialog，靠边刷出，高度填满，顶部或底部固定放置
 button showRipple 改用方法来写，不用css，并改为异步的。
+完善link，动态修改色彩
+实现SideDialog，靠边刷出，高度填满，顶部或底部固定放置
+实现移动端相关面板组件
 
-如何回收自动创建的style标签？
+temple
+drag
+swipe
+control
+    switch
+    groupbutton
+    textbox
+shape
+实现 react、vue那样的组件生成方式
+
+
+Q：如何回收自动创建的style标签？
     删除前没有事件或方法可以调用
     删除后，标签都不存在了，属性和方法都不能调用了
     唯有静态成员还存在，那只能用class方式了
     注：ripple.animateend 方法会自动释放
 
-完善link，动态修改色彩
-canvas and shape
-swipe
-tooltip
-layout-backend
-layout-dashboard
-实现 react、vue那样的组件生成方式
 child sortable
-
-
-发布
-    build min.js
-    备选名称：classless.js, noclass.js, cssless.js, onlytags.js
+发布build min.js
+备选名称：classless.js, noclass.js, cssless.js, onlytags.js
 ```
 
 
 #7. History
 -----------------------------------------------------
 ```
+/用 ajax 简化页面代码显示，再用个iframe吧
 /bgimage
        background-image: url('path/to/your/image.jpg');
        background-repeat: no-repeat;

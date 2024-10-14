@@ -1,27 +1,9 @@
-<!DOCTYPE html>
 <head>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/default.min.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
-    <script src="../bin/fx.js" ></script>
     <script src="../bin/xtags.js" type="module" defer></script>
 </head>
 <body>
-    <x-style></x-style>
     <x-container bgcolor="lightblue" childAnchor="center" height="98vh">
         Hello world!
-        <x-div tagname="pre" width='100%' overflow='scroll'>
-            <code id="code"></code>
-        </x-div>
     </x-container>
 </body>
 </html>
-
-<script>
-    var txt = htmlEncode(`
-        <x-container bgcolor="#f0f0f0" childAnchor="center" height="98vh">
-            Hello world!
-        </x-container>
-      `);
-    $('#code').innerHTML = txt;
-    hljs.highlightAll();
-</script>

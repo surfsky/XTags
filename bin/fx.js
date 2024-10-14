@@ -3,13 +3,20 @@
  * @author surfsky.github.com 2024
  */
 
+//--------------------------------------------
+// DOM
+//--------------------------------------------
 /**Select one element */
 function $(selector) { return document.querySelector(selector);}
 
-
-/**Simply event bind */
+/**Event bind */
 Element.on = function(eventname, func) { return this.addEventListener(eventname, func); }
 
+
+
+//--------------------------------------------
+// Text
+//--------------------------------------------
 /**HtmlEncode */
 function htmlEncode(code) {
   //return code.replace(/[<>&"']/g, function(match) {
@@ -24,22 +31,38 @@ function htmlEncode(code) {
   });
 }
 
-/**
- * Display html highlight code in container.
- * @param {stirng} containerId container  <pre> tag id, to display code.
- * @description
- * <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/default.min.css">
- * <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
- */
-function showPageCode(containerId){
-    const bodyHtml = document.body.outerHTML;
-    // clear <script> <!-- comment --> and empty line.
-    const bodyWithoutScript = bodyHtml.replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '');
-    const bodyWithoutComments = bodyWithoutScript.replace(/<!--[\s\S]*?-->/g, '');
-    const bodyWithoutEmptyLines = bodyWithoutComments.replace(/^\s*[\r\n]/gm, '');
 
-    // highlight display in container using highlight.js
-    const container = document.getElementById(containerId);
-    container.textContent = bodyWithoutEmptyLines;
-    hljs.highlightElement(container);
+/**Get query string 
+ * @param {string} url
+ * @returns {string}
+*/
+function getQueryString(url) {
+  const queryString = url.split('?')[1];
+  return queryString? queryString : null;
+}
+
+
+//--------------------------------------------
+// Network
+//--------------------------------------------
+/**
+ * Ajax get
+ * @param (string) url
+*/
+async function get(url) {
+  return new Promise((resolve, reject) => {
+    const xhr = new XMLHttpRequest();
+    xhr.open('GET', url, true);
+    xhr.onreadystatechange = function () {
+      if (xhr.readyState === 4) {
+        if (xhr.status === 200) {
+          const content = xhr.responseText;
+          resolve(content);
+        } else {
+          reject(new Error('Failed to fetch the page.'));
+        }
+      }
+    };
+    xhr.send();
+  });
 }

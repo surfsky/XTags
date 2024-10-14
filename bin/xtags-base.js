@@ -27,9 +27,9 @@ export const Anchor = {
 export class Theme{
     constructor(opt) {
         this.name        = opt.name;
-        this.background  = opt.background;
         this.text        = opt.text;
         this.textLight   = opt.textLight;
+        this.background  = opt.background;
         this.link        = opt.link;
         this.linkHover   = opt.linkHover;
         this.linkVisited = opt.linkVisited;
@@ -48,9 +48,9 @@ export class Theme{
     /** Theme light*/
     static themeLight = new Theme({
         name        : 'iOSLight',
-        background  : 'white',
         text        : 'black',
         textLight   : 'white',
+        background  : 'white',
         link        : 'blue',
         linkHover   : 'darkblue',
         linkVisited : 'gray',
@@ -69,9 +69,9 @@ export class Theme{
     /** Theme dark */
     static themeDark = new Theme({
         name        : 'MaterialDark',
-        background  : '#171717',
         text        : '#cccccc',
         textLight   : '#f0f0f0', //'#f8f9fa',
+        background  : '#171717',
         link        : 'red',
         linkHover   : 'green',
         linkVisited : 'gray',
@@ -170,11 +170,11 @@ export class XTags {
        return document.querySelectorAll(selector);
     }
 
-    /**Parse centain tag string to a html node 
+    /**Parse centain tag string to a html element node.
      * @param {string} tagText eg. <div>...</div>
      * @returns {ChildNode}
     */
-    static parseDomNode(tagText){
+    static parseElement(tagText){
         var parser = new DOMParser();
         var doc = parser.parseFromString(tagText, 'text/html');
         return doc.body.firstChild;
@@ -444,7 +444,13 @@ export class Tag extends HTMLElement {
     ];
 
     /** Create element in shadow or body*/
-    get useShadow() {return  false;}
+    get useShadow() {
+        var attr = this.getAttribute('useshadow');
+        if (attr == null)
+            return false;
+        else
+            return XTags.toBool(attr);
+    }
 
     /**Constructor. Build a frame rectangle with content in center.*/
     constructor() {
@@ -559,6 +565,7 @@ export class Tag extends HTMLElement {
         switch(name){
             // common
             case 'id':                this.root.setAttribute('id', newValue); break;
+            case 'name':              this.root.setAttribute('name', newValue); break;
             case 'class':             this.root.setAttribute('class', newValue); break;
             case 'newclass':          this.root.setAttribute('class', newValue + ' ' + this.root.getAttribute('class')); break;
             case 'z':                 this.root.style.zIndex = newValue; break;

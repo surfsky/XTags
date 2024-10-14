@@ -1,47 +1,18 @@
-<!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>xtags rect</title>
-    <!-- Use xtags.js. Notice here must attach 'defer' attribute -->
+    <title>xtags animation</title>
     <script src="../bin/xtags.js" type="module" defer></script>
 </head>
 <body>
-    <!-- fix rects -->
-    <x-rect bgcolor="lightgreen" click="animate(this)">
-        click to change color
-    </x-rect>
-    <x-rect bgcolor="lightblue"  click="toggleDiv()">
-        click to change size
-    </x-rect>
-    <x-rect bgcolor="lightred"  hoverbgcolor="lightblue" >
-        hover to change color
-    </x-rect>
+    <x-rect width='200px' bgcolor="lightgreen" click="animate(this)" id="rect1">click to change color</x-rect>
+    <x-rect width='200px' bgcolor="lightblue"  click="toggleDiv()" id="rect2">click to change size</x-rect>
+    <x-rect width='200px' bgcolor="lightred"  hoverbgcolor="lightblue" >hover to change color</x-rect>
 </body>
 </html>
 
 <script>
-    var b = false;
-    function toggleDiv(){
-        var ele = document.getElementById('topDiv');
-        b = !b;
-        if (b){
-            // set root dom's attributes
-            ele.style.width = '500px';
-            ele.style.top = '100px';
-            ele.style.backgroundColor = 'green';
-        }
-        else{
-            ele.style.width = '100px';
-            ele.style.top = '0px';
-            ele.style.backgroundColor = 'pink';
-        }
-    };
-
-    function animate(trigger){
-        trigger.animate(()=> trigger.style.backgroundColor = getRandomColor());
+    function animate(ele){
+        ele.animate(()=> ele.style.backgroundColor = getRandomColor());
     }
 
     function getRandomColor() {
@@ -50,4 +21,18 @@
         const b = Math.floor(Math.random() * 256);
         return `rgb(${r},${g},${b})`;
     }
+
+    function toggleDiv(){
+        var ele = document.getElementById('rect2');
+        if (ele.offsetWidth < 500){
+            ele.style.width = '500px';
+            ele.style.backgroundColor = 'green';
+        }
+        else{
+            ele.style.width = '200px';
+            ele.style.backgroundColor = 'pink';
+        }
+    };
+
+
 </script>

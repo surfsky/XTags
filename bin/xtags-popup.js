@@ -59,28 +59,6 @@ export class Toast {
      * @param {string} text information 
      */
     static async show(text, icon='white-bulb', width='400px', height='38px') {
-        /*
-        var toast = new Rect()
-            .setSize('400px', '36px')
-            .setRadius('6px')
-            .setColors(XTags.theme.success, XTags.theme.light)
-            .setAnchor(Anchor.T)
-            .setChildAnchor(Anchor.C)
-            ;
-        toast.content = `<x-row height="100%"><img src='${XTags.getIconUrl(icon)}' width='20px'/><div>${text}<div></x-row>`;
-        toast.style.height = toast.style.boxSizing=='border-box' ? '30px' : '26px';
-        toast.style.opacity = 0.8;
-        toast.style.border = '0';
-        toast.style.top = '-100px';
-        document.body.appendChild(toast);
-        await XTags.sleep(50);
-        toast.style.top = '25px';
-        await XTags.sleep(2000);
-        toast.style.top = '-100px';
-        await XTags.sleep(1000);
-        document.body.removeChild(toast);
-        */
-
         var id = XTags.uuid();
         var tag = `
             <x-rect id='${id}' box='border-box' fixanchor='top' top='-100px' childanchor='center'
@@ -94,10 +72,7 @@ export class Toast {
         `;
 
         // add to body
-        //var ele2 = document.createElement('div');
-        //ele.innerHTML = tag;
-        //document.body.appendChild(ele);
-        var ele = XTags.parseDomNode(tag);
+        var ele = XTags.parseElement(tag);
         document.body.appendChild(ele);
 
         // parse height's value and unit, calc top position.

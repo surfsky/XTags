@@ -1,0 +1,67 @@
+<html>
+<head>
+    <link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/default.min.css">
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+    <script src="../bin/xtags.js" type="module" defer></script>
+</head>
+<body>
+    <x-tag tagname='pre' border='0px solid red' anchor="center" width='90%' box="border-box" padding="20px" overflow="scroll">
+        <code class="html">
+        Loading code...
+        </code>
+    </x-tag>
+</body>
+</html>
+<script>
+    document.addEventListener('DOMContentLoaded', async function () {
+      try {
+         showPageCode();
+      } catch (error) {
+        console.error(error);
+      }
+    });
+
+    // Show page code. Page url like:  code.html?a.html
+    async function showPageCode(){
+        var url = getQueryString(window.location.href);
+        var content = await get(url);
+
+        // 预处理
+        content = content.replace(/<!--[\s\S]*?-->/g, ''); // 删除html注释
+        //content = content.replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '');  // 删除script标签块
+        content = content.replace(/<script(?!.*src)[^>]*>(?:.|\n)*?<\/script>/gi, ''); // 删除script标签块，但保留带src的script标签行
+        content = content.replace(/^\s*\n/gm, '');  // 删除空行
+
+        // 高亮显示在pre标签内部
+        var pre = document.querySelector('pre');
+        if (pre != null){
+            pre.textContent = content;
+            hljs.highlightElement(pre);
+        }
+    }
+
+    // Get query string part.
+    function getQueryString(url) {
+      const queryString = url.split('?')[1];
+      return queryString? queryString : null;
+    }
+
+    // Ajax get url text.
+    async function get(url) {
+      return new Promise((resolve, reject) => {
+        const xhr = new XMLHttpRequest();
+        xhr.open('GET', url, true);
+        xhr.onreadystatechange = function () {
+          if (xhr.readyState === 4) {
+            if (xhr.status === 200) {
+              const content = xhr.responseText;
+              resolve(content);
+            } else {
+              reject(new Error('Failed to fetch the page.'));
+            }
+          }
+        };
+        xhr.send();
+      });
+    }
+</script>
