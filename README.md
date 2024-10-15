@@ -206,7 +206,7 @@
 #5. Extension
 -----------------------------------------------------
 
-# Display any tag with x-tag
+## Display any tag with x-tag
 
 Juse use x-tag and set attribute tagname='sometag'. eg.
 
@@ -216,26 +216,9 @@ Juse use x-tag and set attribute tagname='sometag'. eg.
     </x-tag>
     ```
 
-# Shadow mode or inplace mode?
 
 
-Difference between shadow-mode and inplace-mode:
-
-- Inplace mode: Create tags in doucment body, and replace the raw x-xxx tags. This mode can be compatible with third-party libraries. The most xtags are build by *inplace mode*, excepting some complex control, such as dialog、messagebox、popup.
-
-- Shadow mode: Create tags in shadowDOM, include tags, style, javascript, etc. The advantage is selffolded and poluteless to page. The disadvantage is caused by isolation that the inner elements can't be visited by js search function(eg. document.querySelector()) and page css。 The mode may cause some questions：
-    - The page css can't not effect shadow-mode tag's inner element's style.
-    - Three-party library (such as highlight.js) work fail.
-    - IFrame in xtags can't be expanded auto. <a target='iframename'> can't be worked.
-    - Can't get items's real position in XTags container (such as x-row in popup.html)
-
-- If you want to specify a certain mode, to set the attribute 'useshadow'. eg.
-
-``` html
-<x-form useshadow='true'>....</x-form>
-```
-
-- Build custom tag:
+## Build custom tag
 
 steps
 
@@ -282,6 +265,25 @@ export class Container extends Tag {
 }
 
 customElements.define("x-container", Container);
+```
+
+## Shadow mode or inplace mode?
+
+
+Difference between shadow-mode and inplace-mode:
+
+- Inplace mode: Create tags in doucment body, and replace the raw x-xxx tags. This mode can be compatible with third-party libraries. The most xtags are build by *inplace mode*, excepting some complex control, such as dialog、messagebox、popup.
+
+- Shadow mode: Create tags in shadowDOM, include tags, style, javascript, etc. The advantage is selffolded and poluteless to page. The disadvantage is caused by isolation that the inner elements can't be visited by js search function(eg. document.querySelector()) and page css。 The mode may cause some questions：
+    - The page css can't not effect shadow-mode tag's inner element's style.
+    - Three-party library (such as highlight.js) work fail.
+    - IFrame in xtags can't be expanded auto. <a target='iframename'> can't be worked.
+    - Can't get items's real position in XTags container (such as x-row in popup.html)
+
+- If you want to specify a certain mode, to set the attribute 'mode'. eg.
+
+``` html
+<x-form mode='shadow'>....</x-form>
 ```
 
 
