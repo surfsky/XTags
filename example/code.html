@@ -5,7 +5,7 @@
     <script src="../bin/xtags.js" type="module" defer></script>
 </head>
 <body>
-    <x-tag tagname='pre' border='0px solid red' anchor="center" width='90%' box="border-box" padding="20px" overflow="scroll">
+    <x-tag tagname='pre' border='0px solid red' anchor="center" width='90%' padding="20px" overflow="scroll">
         <code class="html">
         Loading code...
         </code>
@@ -15,6 +15,10 @@
 <script>
     document.addEventListener('DOMContentLoaded', async function () {
       try {
+        var pre = document.querySelector('pre');
+        if (pre != null){
+            pre.textContent = "Loading...";
+        }
          showPageCode();
       } catch (error) {
         console.error(error);
@@ -23,6 +27,7 @@
 
     // Show page code. Page url like:  code.html?a.html
     async function showPageCode(){
+        //
         var url = getQueryString(window.location.href);
         var content = await get(url);
 

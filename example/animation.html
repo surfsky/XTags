@@ -4,9 +4,11 @@
     <script src="../bin/xtags.js" type="module" defer></script>
 </head>
 <body>
-    <x-rect width='200px' bgcolor="lightgreen" click="animate(this)" id="rect1">click to change color</x-rect>
-    <x-rect width='200px' bgcolor="lightblue"  click="toggleDiv()" id="rect2">click to change size</x-rect>
-    <x-rect width='200px' bgcolor="lightred"  hoverbgcolor="lightblue" >hover to change color</x-rect>
+    <x-row>
+        <x-rect width='200px' bgcolor="lightgreen" click="animate(this)" id="rect1">click to change color</x-rect>
+        <x-rect width='200px' bgcolor="lightblue"  click="toggleDiv()" id="rect2">click to change size</x-rect>
+        <x-rect width='200px' bgcolor="lightred"  hoverbgcolor="lightblue" >hover to change color</x-rect>
+    </x-row>
 </body>
 </html>
 
@@ -23,6 +25,7 @@
     }
 
     function toggleDiv(){
+        var that = this;
         var ele = document.getElementById('rect2');
         if (ele.offsetWidth < 500){
             ele.style.width = '500px';

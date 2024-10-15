@@ -4,10 +4,25 @@
 </head>
 
 <body>
-    <x-style box="content-box" bgcolor="#171717"></x-style>
-    <x-row height="100%">
-        <x-rect height="100%" width="100px" bgcolor="green" border="0"></x-rect>
-        <x-rect height="100%" bgcolor="purple" border="0" ></x-rect>
-    </x-row>
+    <x-style 
+       bgimage="http://gips3.baidu.com/it/u=1821127123,1149655687&fm=3028&app=3028&f=JPEG&fmt=auto?w=720&h=1280" 
+       bgsize="cover" />
+    &lt;x-style&gl; tag apply style to body. The default css is:
+    <pre>
+    /* fullscreen */
+    html,body {
+        width: 100%;  height: 100%; 
+        padding: 0px; margin: 0px;
+    }
+
+    /* boxmodule */
+    *, *::before, *::after {box-sizing: border-box;}
+
+    /* animation */
+    * {transition: 0.5s;}
+
+    /* link */
+    a, a:hover, a:visited { text-decoration: none; }
+    </pre>
 </body>
 </html>

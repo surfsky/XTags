@@ -21,7 +21,7 @@ export class Rect extends Tag {
         this.root.style.height = '100px';
         this.root.style.border = '1px solid lightgray';
         this.root.style.overflow = 'hidden';
-        if (this.innerHTML != '')
+        if (this.root.childNodes.length > 0)
             this.setChildAnchor(Anchor.C);
     }
 }
@@ -60,6 +60,8 @@ customElements.define("x-circle", Circle);
  *     <x-row gap="20px">
  ***********************************************************/
 export class Row extends Tag {
+    get mode() {return  'replace';}
+
     constructor() {
         super();
 
@@ -69,18 +71,15 @@ export class Row extends Tag {
         this.root.style.height = '100px';
         this.root.style.display = "flex";
         this.root.style.flexDirection = "row";
-
-        // child margin
-        var gap = this.getAttribute('gap');
-        if (gap != null)
-            this.setChildMargin(`0 ${gap} 0 0`);
     }
 
     /** Set children margin 
      * @param {string} val css number. eg. 10px, 1em, 1rem
     */
     setChildMargin(val){
-        this.root.styleTag = document.createElement('style');
+        this.root.id = this.getId();
+        if (this.root.styleTag == null)
+            this.root.styleTag = document.createElement('style');
         this.root.styleTag.textContent = `#${this.root.id} > *  {margin: ${val} }`;
         this.saveStyle();
     }
@@ -94,7 +93,7 @@ export class Row extends Tag {
         super.attributeChangedCallback(name, oldValue, newValue);
         switch(name){
             case 'gap':            
-                this.setChildMargin(newValue);
+                this.setChildMargin(`0 ${newValue} 0 0`);
                 break;
         }
     }
@@ -116,9 +115,15 @@ export class Column extends Row {
         this.root.style.flexDirection = "column";
         this.root.style.width = '';
         this.root.style.height = '100%';
-        var gap = this.getAttribute('gap');
-        if (gap != null)
-            this.setChildMargin(`0 0 ${gap} 0`);
+    }
+
+    attributeChangedCallback(name, oldValue, newValue) {
+        super.attributeChangedCallback(name, oldValue, newValue);
+        switch(name){
+            case 'gap':            
+                this.setChildMargin(`0 0 ${newValue} 0`);
+                break;
+        }
     }
 }
 
@@ -133,6 +138,8 @@ customElements.define("x-col", Column);
  *     <x-grid gap="20px" columns='100px auto 100px'>
  ***********************************************************/
 export class Grid extends Tag {
+    get mode() {return  'replace';}
+
     constructor() {
         super();
         this.setChildAnchor(null);
@@ -192,7 +199,6 @@ export class Form extends Tag {
     createRoot(){
         this.root = document.createElement('form');
         this.root.classList.add('gridForm');
-        this.root.innerHTML = this.innerHTML;
         this.root.id = this.getId();
         return this.root;
     }
@@ -247,7 +253,6 @@ export class Container extends Tag {
 
     createRoot(){
         this.root = document.createElement('div');
-        this.root.innerHTML = this.innerHTML;
         this.root.style.transition = 'all 0.5s';   // animation
         return this.root;
     }
@@ -292,7 +297,6 @@ export class Frame extends Tag {
 
     createRoot(){
         var root = document.createElement("iframe");
-        root.innerHTML = this.innerHTML;
         root.style.border = '0';
         return root;
     }

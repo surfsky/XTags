@@ -12,7 +12,7 @@
 
 ## See
 
--  [Example site](https://surfsky.github.io/xtags.js)
+-  [Example site](https://surfsky.github.io/xtags.js/)
 -  [Code](./example/index.html)
 
 
@@ -112,7 +112,7 @@
     'border', 'borderwidth', 'bordercolor', 'borderstyle', 'radius',  
 
     // position
-    'position', 'anchor', 'fixanchor', 'top', 'bottom', 'left', 'right',  
+    'position', 'dock', 'anchor', 'fixanchor', 'top', 'bottom', 'left', 'right',  
 
     // child position
     'display', 'childanchor', 'textalign', 'flex', 'gridcolumn',
@@ -288,7 +288,10 @@ customElements.define("x-container", Container);
 #6. Task
 -----------------------------------------------------
 ```
-layout-dashboard 改为 anchor 模式
+完善icon-font，允许下载本地字体并显示。
+实现Penel extends Rect: resizable，dragable
+实现SlidePanel，滑入，一般是不允许拖动的，可以调整大小。
+
 优化dialog
     提供标题栏供拖动
     实现dialog buttons and dialogResult
@@ -324,6 +327,17 @@ child sortable
 #7. History
 -----------------------------------------------------
 ```
+/Fixbug: Rectangle, Circle 偏心了。
+/解决row/column 容器中 rect click 事件失效的问题（但button不会，奇了怪了）
+    row/column 用 cloneChildNodes,  事件ok
+    button 用 cloneChildNodes 显示不出来，用 innerHtml ok
+    这里面有个顺序问题
+    改用 this.insertChild(this.root) 方式来改造，这样xtag本身的事件和方法不会丢失，生成的子控件
+/发布 github pages：https://surfsky.github.io/xtags.js/
+/解决style重复写的问题。
+/layout-dashboard 改为 anchor 模式
+/实现dock 属性：top, right, bottom, left
+/解决click事件会穿透到父节点的问题
 /用 ajax 简化页面代码显示，再用个iframe吧
 /bgimage
        background-image: url('path/to/your/image.jpg');

@@ -422,7 +422,7 @@ export class Tag extends HTMLElement {
         'border', 'borderwidth', 'bordercolor', 'borderstyle', 'radius',  
 
         // position
-        'position', 'anchor', 'fixanchor', 'top', 'bottom', 'left', 'right',  
+        'position', 'anchor', 'fixanchor', 'dock', 'top', 'bottom', 'left', 'right',  
 
         // child position
         'display', 'childanchor', 'textalign', 'flex', 'gridcolumn',
@@ -440,22 +440,21 @@ export class Tag extends HTMLElement {
         'hoverbgcolor', 'hovercolor',
 
         // event
-        'click', 'draggable',
+        'events', 'click', 'draggable',
     ];
 
-    /** Create element in shadow or body*/
-    get useShadow() {
-        var attr = this.getAttribute('useshadow');
+    /** Create element mode: shadow, replace, child*/
+    get mode() {
+        var attr = this.getAttribute('mode');
         if (attr == null)
-            return false;
-        else
-            return XTags.toBool(attr);
+            return 'replace';
+        return attr;
     }
 
     /**Constructor. Build a frame rectangle with content in center.*/
     constructor() {
         super();
-        if (this.useShadow)
+        if (this.mode == 'shadow')
             this.attachShadow({mode: 'open'});
 
         // root element with styletag
@@ -495,10 +494,7 @@ export class Tag extends HTMLElement {
     createRoot(){
         var tagName = this.getAttribute('tagname');
         if (tagName == null) tagName = 'div';
-
-        //
         var ele = document.createElement(tagName);
-        ele.innerHTML = this.innerHTML;      // contain child items
         ele.style.transition = 'all 0.5s';   // animation
         //ele.style.boxSizing = 'border-box';  // size = content + padding + border, margin is outside.
         return ele;
@@ -509,17 +505,29 @@ export class Tag extends HTMLElement {
         return null;
     }
 
+    /**Judge to add child automatic or manually */
+    get addChild() {return  true;}
+
     /**Save root element. */
     saveRoot(){
         if (this.root == null || this.root == document.body) 
             return;
 
-        if (this.useShadow)
+        if (this.mode == 'shadow'){
+            if (this.addChild){
+                //this.root.innerHTML = this.innerHTML;
+                Array.from(this.childNodes).forEach(child => this.root.appendChild(child));
+            }
             this.shadowRoot.appendChild(this.root);
+        }
         else {
+            // replace
+            if (this.addChild){
+                //this.root.innerHTML = this.innerHTML;
+                Array.from(this.childNodes).forEach(child => this.root.appendChild(child));
+            }
             const parent = this.parentNode;
             if (parent != null){
-                // replace inplace
                 const index = Array.from(parent.children).indexOf(this);
                 parent.removeChild(this);
                 parent.insertBefore(this.root, parent.children[index]);
@@ -530,18 +538,33 @@ export class Tag extends HTMLElement {
     /** Save styleTage element */
     saveStyle(){
         if (this.root.styleTag == null) return;
-        if (this.useShadow){
+        if (this.mode == 'shadow'){
             this.shadowRoot.appendChild(this.root.styleTag);
         }
         else{
-            document.head.appendChild(this.root.styleTag);
+            this.root.id = this.getId();
+            var styleId = this.root.id + '-style';
+            this.root.styleTag.id = styleId;
+
+            //
+            var tag = document.getElementById(styleId);
+            if (tag == null)
+                document.head.appendChild(this.root.styleTag);
+            else
+                tag.textContent = this.root.styleTag.textContent;
         }
     }
 
     /**Get or build uuid id. */
     getId(){
-        var id = this.getAttribute('id');
-        if (id == null) id = XTags.uuid();
+        var id = this.root.id;  
+        if (id == ''){
+            var idAttr = this.getAttribute('id');
+            if (idAttr != null)
+                id = idAttr;
+            else
+                id = XTags.uuid();
+        }
         return id;
     }
 
@@ -586,6 +609,7 @@ export class Tag extends HTMLElement {
             case 'position':          this.root.style.position = newValue; break;
             case 'anchor':            this.setAnchor(newValue, 'absolute'); break;
             case 'fixanchor':         this.setAnchor(newValue, 'fixed'); break;
+            case 'dock':              this.setDock(newValue, 'absolute'); break;
             case 'top':               this.root.style.top = newValue;  break;
             case 'bottom':            this.root.style.bottom = newValue;  break;
             case 'left':              this.root.style.left = newValue;  break;
@@ -654,6 +678,7 @@ export class Tag extends HTMLElement {
             case 'hovercolor':        this.setHoverTextColor(newValue);  break;
 
             // event
+            case 'events':            this.root.style.pointerEvents = newValue; break;
             case 'click':             this.setClick(newValue); break;
             case 'draggable':         this.root.setAttribute('draggable', newValue);  // draggable="true"
         }
@@ -818,14 +843,27 @@ export class Tag extends HTMLElement {
     /** Set child fill parent. Add css. */
     setChildFill(){
         this.root.style.display = 'flex';
-        this.root.classList.add('x-container');
-        if (this.childStyleTag == null){
-            this.childStyleTag = document.createElement('style');
-            this.childStyleTag.textContent = `
-                x-container > * { flex: 1}
-                `;
-            this.shadowRoot.appendChild(this.childStyleTag);
+        this.root.id = this.getId();
+        if (this.root.styleTag == null){
+            this.root.styleTag = document.createElement('style');
         }
+        this.root.styleTag.textContent = `#${this.root.id} > * { flex: 1}`;
+        //this.saveStyle();
+    }
+
+    /**Set dock 
+     * @param {string} anchor top, left, right, bottom 
+    */
+    setDock(anchor, position='absolute'){
+        var s = this.root.style;
+        switch (anchor){
+            case Anchor.T   : s.position=position; s.width='';               s.top='0';                      s.left='0';    s.right='0';   break;
+            case Anchor.B   : s.position=position; s.width='';               s.bottom='0';   s.left='0';    s.right='0';   break;
+            case Anchor.L   : s.position=position; s.height='';              s.top='0';      s.bottom='0';   s.left='0';                   break;
+            case Anchor.R   : s.position=position; s.height='';              s.top='0';      s.bottom='0';                  s.right='0';   break;
+            case Anchor.F   : s.position=position; s.width='';  s.height=''; s.top='0';      s.bottom='0';   s.left='0';    s.right='0';   break;
+        }
+        return this;
     }
 
     //-----------------------------------------------------
@@ -974,7 +1012,10 @@ export class Tag extends HTMLElement {
     //-----------------------------------------------------
     /** Set click event */
     setClick(func){
-        this.root.addEventListener('click', ()=>eval(func));
+        this.root.addEventListener('click', (e)=>{
+            e.stopPropagation(); // no send event to other
+            eval(func);
+        });
         return this;
     }
 

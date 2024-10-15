@@ -179,7 +179,10 @@ export class Tooltip {
  ***********************************************************/
 export class Dialog extends Tag {
     /** Create element in shadow mode*/
-    get useShadow() {return  true;}
+    get mode() {return  'shadow';}
+
+    /** Add child self*/
+    get addChild() {return  false;}
 
     constructor() {
         super();
@@ -299,7 +302,8 @@ export class Dialog extends Tag {
         // content
         this.contentDiv = document.createElement('div');
         this.contentDiv.classList.add('popup-content');
-        this.contentDiv.innerHTML = this.innerHTML;
+        //this.contentDiv.innerHTML = this.innerHTML;   ///////////
+        Array.from(this.childNodes).forEach(child => this.contentDiv.appendChild(child));
         this.root.appendChild(this.contentDiv);
 
         // resizer

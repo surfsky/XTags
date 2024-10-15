@@ -4,20 +4,8 @@
     <script src="../bin/xtags.js" type="module" defer></script>
 </head>
 <body>
-    <x-rect anchor="fill" childAnchor="center" border="0" id="main">
-        <x-row anchor="topRight" right="10px" top="20px" width="100px" gap="2px">
-            <x-img icon="black-refresh" width="18px" height="18px" click="location.reload()" cursor="pointer"></x-img>
-            <x-link href="http://github.com/surfsky/xtags" target="_blank" color="red" >Github</x-link>
-        </x-row>
-        <h1>XTags.js</h1>
-        <small>Write html and easy layout with only tags & attributes.</small>
-        <small>No nodejs, No class, No css.</small>
-        <small>Build by pure html5 custom-tag tech.</small>
-        <x-row width="400px"  gap="8px" margintop="20px">
-            <x-btn click="XTags.setTheme(Theme.themeLight)" theme="primary">Light</x-btn>
-            <x-btn click="XTags.setTheme(Theme.themeDark)" theme="secondary">Dark</x-btn>
-            <x-btn click="Toast.show('Hello XTags.js!', 'white-bulb')" theme="success" >Toast</x-btn>
-        </x-row>
-    </x-rect>
+    <x-link href="http://github.com/surfsky/xtags.js/" target="_blank" color="red" >Github site</x-link>
+    <br/>
+    <x-link href="http://surfsky.github.io/xtags.js/" target="_blank" color="blue" >Github page</x-link>
 </body>
 </html>

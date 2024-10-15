@@ -26,8 +26,9 @@
 
 import { XTags, Tag, Style, Theme, Anchor} from "./xtags-base.js";
 import { Rect, Circle, Row, Column, Grid, Form, Frame} from "./xtags-container.js";
-import { Image, Link, Button} from "./xtags-control.js";
 import { Mask, Toast, Tooltip, Dialog, MessageBox, Popup } from "./xtags-popup.js";
+import { Image, Icon, Link} from "./xtags-control.js";
+import { Button} from "./xtags-form.js";
 
 
 

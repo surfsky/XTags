@@ -1,0 +1,83 @@
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="./favicon.ico" type="image/x-icon" />
+    <title>xtags.js</title>
+    <script src="./bin/xtags.js" type="module" defer></script>
+</head>
+
+<body onload="setLinks()">
+    <x-style></x-style>
+    <x-row width="100%" height="100%">
+        <x-col width="300px" height="100%" bgcolor="#f0f0f0" padding="20px 0 0 0">
+          <ul>
+            <li><a target="iframe1" href="./example/about.html">About</a></li>
+            <li><a target="iframe1" href="./example/theme.html">Theme</a></li>
+            <li>Basic</li>
+            <ul>
+              <li><a target="iframe1" href="./example/basic-tag.html">Tag</a></li>
+              <li><a target="iframe1" href="./example/basic-div.html">Div</a></li>
+              <li><a target="iframe1" href="./example/basic-style.html">Style</a></li>
+            </ul>
+            <li>Container</li>
+            <ul>
+              <li><a target="iframe1" href="./example/basic-rect.html">Rectangle</a></li>
+              <li><a target="iframe1" href="./example/basic-circle.html">Circle</a></li>
+              <li><a target="iframe1" href="./example/layout-anchor.html">Anchor</a></li>
+              <li><a target="iframe1" href="./example/layout-dock.html">Dock</a></li>
+              <li><a target="iframe1" href="./example/layout-rowcolgrid.html">Row Column Grid</a></li>
+              <li><a target="iframe1" href="./example/layout-container.html">Responsive Container</a></li>
+              <li><a target="iframe1" href="./example/layout-form.html">Responsive Form</a></li>
+              <li><a target="iframe1" href="./example/layout-portal.html">Portal</a></li>
+              <li><a target="iframe1" href="./example/layout-dashboard.html">Map dashboard</a></li>
+              <li><a target="iframe1" href="./example/layout-mobile.html">Mobile</a></li>
+            </ul>
+            <li>Control</li>
+            <ul>
+              <li><a target="iframe1" href="./example/image.html">Image</a></li>
+              <li><a target="iframe1" href="./example/icon.html">Icon</a></li>
+              <li><a target="iframe1" href="./example/link.html">Link</a></li>
+            </ul>
+            <li>Popup</li>
+            <ul>
+              <li><a target="iframe1" href="./example/popup.html">Popup</a></li>
+            </ul>
+            <li>Form</li>
+            <ul>
+              <li><a target="iframe1" href="./example/button.html">Button</a></li>
+            </ul>
+            <li>Extension</li>
+            <ul>
+              <li><a target="iframe1" href="./example/animation.html">Animation</a></li>
+            </ul>
+          </ul>
+        </x-col>
+        <x-col flex="1">
+          <iframe  id='iframe1' name="iframe1" src="./example/about.html"           height="60%" style="border:0;"></iframe>
+          <x-frame id='iframe2' name="iframe2" src="./example/code.html?about.html" flex="1"     border="1px" ></x-frame>
+        </x-col>
+    </x-row>
+</body>
+</html>
+
+<script>
+    // Let iframe1 to show page, iframe2 to show code.
+    function setLinks(){
+        var iframe1 = document.getElementById('iframe1');
+        var iframe2 = document.getElementById('iframe2');
+        const links = document.getElementsByTagName('a');
+        for (let i = 0; i < links.length; i++) {
+            links[i].addEventListener('click', function (event) {
+                event.preventDefault();
+                iframe1.src = this.href;
+
+                // code.html?xxx.html
+                var href = this.href;
+                var n = href.lastIndexOf('/');
+                if (n != -1)
+                    href = href.slice(n+1);
+                iframe2.src = './example/code.html?' + href;
+            });
+        }
+    }
+</script>

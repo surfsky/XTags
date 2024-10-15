@@ -597,3 +597,76 @@ function showPageCode(containerId){
     container.textContent = bodyWithoutEmptyLines;
     hljs.highlightElement(container);
 }
+
+
+
+<script>
+    var txt = htmlEncode(`
+      <x-form action="about.html">
+        <label>Name</label> <input type="text"></input>
+        <label>Name</label> <input type="text"></input>
+        <label>Name</label> <input type="text"></input>
+        <label>Name</label> <input type="text"></input>
+        <label>Name</label> <input type="text"></input>
+        <x-btn gridcolumn="1-1" height="34px" margintop="20px">OK</x-btn>
+      </x-form>
+      `);
+    $('#code').innerHTML = txt;
+    hljs.highlightAll();
+</script>
+
+    <x-tag tagname="pre" width='90%' overflow='scroll' anchor="bottom">
+      <code id="code"></code>
+    </x-tag>
+
+  <div id="map"></div>
+  <x-grid anchor="fill" bgcolor="transparent" columns='200px auto 200px' rows="200px auto" gap='10px' padding="10px" bgcolor="#2196F3">
+    <x-div childanchor="center" bgcolor="#0000FF60" gridcolumn="1-3">1</x-div>
+    <x-div childanchor="center" bgcolor="#0000FF60" gridcolumn="1-1">2</x-div>
+    <x-div childanchor="center" bgcolor="#0000FF60" gridcolumn="3-2">3</x-div>
+  </x-grid>
+
+
+
+  // sidebar auto height
+  /*
+  window.addEventListener('load',   ()=>setSidebarSize());
+  window.addEventListener('resize', ()=>setSidebarSize());
+  function setSidebarSize(){
+      //document.querySelector("#sideLeft").style.height  = 'calc(100vh-200px)';
+      //document.querySelector("#sideRight").style.height = 'calc(100vh-200px)';
+      var h = window.innerHeight - 200 + 'px';
+      document.querySelector("#sideLeft").style.height  = h;
+      document.querySelector("#sideRight").style.height = h;
+  }
+  */
+
+  <x-div click='alert(this.id);' bgcolor="#0000FF60" childanchor="center" position="fixed" height="200px" top="0"     left="0"   right="0">1</x-div>
+  <x-div click='alert(this.id);' bgcolor="#0000FF60" childanchor="center" position="fixed" width="200px"  top="200px" bottom='0' left="0" >2</x-div>
+  <x-div click='alert(this.id);' bgcolor="#0000FF60" childanchor="center" position="fixed" width="200px"  top="200px" bottom='0' right="0">3</x-div>
+
+
+        // child margin
+        var gap = this.getAttribute('gap');
+        if (gap != null)
+            this.setChildMargin(`0 ${gap} 0 0`);
+
+        var gap = this.getAttribute('gap');
+        if (gap != null)
+            this.setChildMargin(`0 0 ${gap} 0`);
+
+    cloneChild(){
+        if (this.root == null || this.root == document.body) 
+            return;
+
+        //this.root.innerHTML = this.innerHTML;
+        //for (let child of this.childNodes) {
+        //    this.root.appendChild(child);
+        //}
+    }
+
+        else if (this.mode == 'child'){
+            // move children to this.root (container will fail)
+            Array.from(this.childNodes).forEach(child => this.root.appendChild(child));
+            this.appendChild(this.root);
+        }
